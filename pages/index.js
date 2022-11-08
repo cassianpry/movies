@@ -2,8 +2,10 @@ import Head from 'next/head';
 import Header from '../components/Header';
 import Navbar from '../components/Navbar';
 import Results from '../components/Results';
+import requests from '../utils/requests';
 
-export default function Home() {
+export default function Home({ results }) {
+  console.log(results);
   return (
     <div>
       <Head>
@@ -16,7 +18,19 @@ export default function Home() {
       {/* Navbar */}
       <Navbar />
       {/* Results */}
-      <Results />
+      <Results results={results} />
     </div>
   );
+}
+
+export async function getServerSideProps(context) {
+  const genre = context.query.genr || 'fetchTrending';
+  const request = await fetch(
+    `${process.env.BASE_URL}${requests[genre].url}`
+  ).then((response) => response.json());
+  return {
+    props: {
+      results: request.results,
+    },
+  };
 }

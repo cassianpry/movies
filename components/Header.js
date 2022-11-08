@@ -22,6 +22,7 @@ export default function Header() {
         alt="imdb logo"
         width={100}
         height={100}
+        priority
       />
     </div>
   );
