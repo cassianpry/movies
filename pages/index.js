@@ -1,8 +1,8 @@
-import Head from 'next/head';
-import Header from '../components/Header';
-import Navbar from '../components/Navbar';
-import Results from '../components/Results';
-import requests from '../utils/requests';
+import Head from "next/head";
+import Header from "../components/Header";
+import Navbar from "../components/Navbar";
+import Results from "../components/Results";
+import requests from "../utils/requests";
 
 export default function Home({ results }) {
   console.log(results);
@@ -24,13 +24,19 @@ export default function Home({ results }) {
 }
 
 export async function getServerSideProps(context) {
-  const genre = context.query.genr || 'fetchTrending';
+  const genre = context.query.genre || "fetchTrending";
   const request = await fetch(
-    `${process.env.BASE_URL}${requests[genre].url}`
+    `${process.env.BASE_URL}${requests[genre]?.url}`,
+    {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${process.env.TOKEN_API}`,
+      },
+    }
   ).then((response) => response.json());
   return {
     props: {
-      results: request.results,
+      results: request.results || [],
     },
   };
 }
